@@ -1,14 +1,14 @@
 import axios from "axios";
 
-const USERAPI = 'http://localhost:8081';
+const USERAPI = 'http://lb-proyecto-695045040.us-east-1.elb.amazonaws.com:8081';
 
-const FIELDSAPI = 'http://localhost:8082';
+const FIELDSAPI = 'http://lb-proyecto-695045040.us-east-1.elb.amazonaws.com:8082';
 
-const RESERVATIONSAPI = 'http://localhost:8000/api/v1';
+const RESERVATIONSAPI = 'http://lb-proyecto-695045040.us-east-1.elb.amazonaws.com:8000/api/v1';
 
-const PAGOSAPI = 'http://localhost:3000'
+const PAGOSAPI = 'http://lb-proyecto-695045040.us-east-1.elb.amazonaws.com:3000'
 
-const ORQUESTADOR = "http://localhost:8000"
+const ORQUESTADOR = "http://lb-proyecto-695045040.us-east-1.elb.amazonaws.com:8080"
 
 export const fetchLogin = async(username, password) => {
 
@@ -71,21 +71,23 @@ export const fetchPagos = async () => {
 // Orquestador
 
 export const reservationPost = async (reservationRequest) => {
-    const response = await fetch(`${USERAPI}/reserva-con-pago`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(reservationRequest),
-    });
-    if (!response.ok) {
-      throw new Error('Error al crear la reserva y el pago');
-    }
-    return response.json();
-  };
+  const response = await fetch(`${ORQUESTADOR}/reserva-con-pago`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(reservationRequest),
+  });
+
+  if (!response.ok) {
+    throw new Error('Error al crear la reserva y el pago');
+  }
+
+  return response.json();
+};
 
 export const fetchReservationDetails = async (id) => {
-    const response = await fetch(`http://localhost:8080/reservas/detalles/${id}`);
+    const response = await fetch(`${ORQUESTADOR}/reservas/detalles/${id}`);
     if (!response.ok) {
         throw new Error('Error al obtener los detalles de la reserva');
     }

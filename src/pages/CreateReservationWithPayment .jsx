@@ -5,25 +5,28 @@ import { Container, Form, Button, Alert } from 'react-bootstrap';
 const CreateReservationWithPayment = () => {
   const [userId, setUserId] = useState('');
   const [fieldId, setFieldId] = useState('');
-  const [date, setDate] = useState('');
   const [timeSlot, setTimeSlot] = useState('');
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const currentDate = new Date().toISOString(); // Genera la fecha y hora actual en formato ISO
+
     const reservationRequest = {
       user: userId,
       field: fieldId,
-      zonedatetime: date,
+      zonedatetime: currentDate, // Utiliza la fecha y hora actual
       timeslot_id: timeSlot,
     };
 
     try {
-      const response = await createReservationWithPayment(reservationRequest); // Llama a la API para crear la reserva con pago
+      const response = await reservationPost(reservationRequest); // Llama a la API para crear la reserva con pago
       setSuccessMessage('Reserva y pago creados exitosamente');
+      setError(null); // Limpia los errores si la creación fue exitosa
     } catch (error) {
       setError('Error al crear la reserva o el pago');
+      setSuccessMessage(null); // Limpia el mensaje de éxito si ocurrió un error
     }
   };
 
@@ -68,16 +71,6 @@ const CreateReservationWithPayment = () => {
             type="text"
             value={fieldId}
             onChange={(e) => setFieldId(e.target.value)}
-            required
-          />
-        </Form.Group>
-
-        <Form.Group controlId="date">
-          <Form.Label>Fecha</Form.Label>
-          <Form.Control
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
             required
           />
         </Form.Group>

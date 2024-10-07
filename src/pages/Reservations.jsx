@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchReservations, fetchReservationDetails } from '../services/api'; // Asegúrate de que las rutas sean correctas
+import { fetchReservations, fetchReservationDetails } from '../services/api';
 import { Container, Row, Col, Alert, Button, Modal } from 'react-bootstrap';
 
 const Reservations = () => {
@@ -11,21 +11,22 @@ const Reservations = () => {
   useEffect(() => {
     const getReservations = async () => {
       try {
-        const data = await fetchReservations(); // Llama a la función para obtener las reservas
-        setReservations(data); // Actualiza el estado con las reservas obtenidas
+        const data = await fetchReservations();
+        setReservations(data);
       } catch (error) {
-        setError('Error al obtener las reservas'); // Maneja el error
+        setError('Error al obtener las reservas');
       }
     };
 
     getReservations();
-  }, []); // Ejecutar solo al montar el componente
+  }, []);
 
-  const handleDetailsClick = async (id) => {
+  const handleDetailsClick = async (_id) => {
     try {
-      const details = await fetchReservationDetails(id); // Llama a la API para obtener los detalles
+      console.log(_id);
+      const details = await fetchReservationDetails(_id);
       setReservationDetails(details);
-      setShowModal(true); // Muestra el modal con los detalles
+      setShowModal(true);
     } catch (error) {
       setError('Error al obtener los detalles de la reserva');
     }
@@ -73,16 +74,16 @@ const Reservations = () => {
                 }}
               >
                 <Col xs={3} style={{ color: '#2c3e50' }}>
-                  <strong>Usuario:</strong> {reservation.user}
+                  <strong>Usuario: </strong> {reservation.user}
                 </Col>
                 <Col xs={3}>
-                  <strong>Campo:</strong> {reservation.field}
+                  <strong>Campo: </strong> {reservation.field}
                 </Col>
                 <Col xs={3}>
-                  <strong>Fecha:</strong> {new Date(reservation.zonedatetime).toLocaleDateString()}
+                  <strong>Fecha: </strong> {new Date(reservation.zonedatetime).toLocaleDateString()}
                 </Col>
                 <Col xs={3}>
-                  <Button variant="info" onClick={() => handleDetailsClick(reservation.id)}>
+                  <Button variant="info" onClick={() => handleDetailsClick(reservation._id)}>
                     Ver Detalles
                   </Button>
                 </Col>
@@ -92,16 +93,20 @@ const Reservations = () => {
         </Col>
       </Row>
 
-      {/* Modal para mostrar los detalles de la reserva */}
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Detalles de la Reserva</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      {/* Modal centrado con fondo oscuro */}
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        centered
+        backdrop="static"
+        size="lg"
+        animation={true}
+      >
+        <Modal.Body style={{ textAlign: 'center', padding: '2rem', backgroundColor: '#3f494c' }}>
           {reservationDetails ? (
             <div>
-              <h5>Reserva:</h5>
-              <p><strong>ID:</strong> {reservationDetails.reservation.id}</p>
+              <p style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#33fff0' }}>Detalles de la Reserva</p>
+              <p><strong>ID:</strong> {reservationDetails.reservation._id}</p>
               <p><strong>Usuario:</strong> {reservationDetails.user.name}</p>
               <p><strong>Campo:</strong> {reservationDetails.field.name}</p>
               <p><strong>Fecha:</strong> {new Date(reservationDetails.reservation.zonedatetime).toLocaleDateString()}</p>
@@ -111,6 +116,11 @@ const Reservations = () => {
             <p>Cargando detalles...</p>
           )}
         </Modal.Body>
+        <Modal.Footer style={{ justifyContent: 'center' }}>
+          <Button variant="danger" onClick={() => setShowModal(false)}>
+            Cerrar
+          </Button>
+        </Modal.Footer>
       </Modal>
     </Container>
   );
