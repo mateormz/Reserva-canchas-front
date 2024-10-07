@@ -1,0 +1,85 @@
+/* Estilos generales de los contenedores */
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f7f9fc;
+  }
+  
+  .form-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Títulos y subtítulos */
+  .form-box h2 {
+    text-align: center;
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+  }
+  
+  .form-box p {
+    text-align: center;
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+  }
+  
+  /* Input y botones */
+  .input-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .input-group input:focus {
+    border-color: #3498db;
+    outline: none;
+  }
+  
+  .form-button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .form-button:hover {
+    background-color: #2980b9;
+  }
+  
+  /* Enlaces y texto de ayuda */
+  .form-text {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+  }
+  
+  .form-link {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .form-link:hover {
+    color: #2980b9;
+    text-decoration: underline;
+  }  
