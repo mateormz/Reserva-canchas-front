@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { fetchReservations } from '../services/api'; // Asegúrate de que la ruta sea correcta
-import { Container, Row, Col, Alert } from 'react-bootstrap';
+import { fetchReservations, fetchReservationDetails } from '../services/api'; // Asegúrate de que las rutas sean correctas
+import { Container, Row, Col, Alert, Button, Modal } from 'react-bootstrap';
 
 const Reservations = () => {
   const [reservations, setReservations] = useState([]);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [reservationDetails, setReservationDetails] = useState(null);
 
   useEffect(() => {
     const getReservations = async () => {
@@ -18,6 +20,16 @@ const Reservations = () => {
 
     getReservations();
   }, []); // Ejecutar solo al montar el componente
+
+  const handleDetailsClick = async (id) => {
+    try {
+      const details = await fetchReservationDetails(id); // Llama a la API para obtener los detalles
+      setReservationDetails(details);
+      setShowModal(true); // Muestra el modal con los detalles
+    } catch (error) {
+      setError('Error al obtener los detalles de la reserva');
+    }
+  };
 
   return (
     <Container
@@ -47,9 +59,9 @@ const Reservations = () => {
           {reservations.length === 0 ? (
             <p style={{ textAlign: 'center' }}>No hay reservas disponibles.</p>
           ) : (
-            reservations.map((reservation) => (
+            reservations.map((reservation, index) => (
               <Row
-                key={reservation.id}
+                key={index}
                 style={{
                   margin: '0.5rem 0',
                   padding: '1rem',
@@ -70,13 +82,36 @@ const Reservations = () => {
                   <strong>Fecha:</strong> {new Date(reservation.zonedatetime).toLocaleDateString()}
                 </Col>
                 <Col xs={3}>
-                  <strong>Hora:</strong> {new Date(reservation.zonedatetime).toLocaleTimeString()}
+                  <Button variant="info" onClick={() => handleDetailsClick(reservation.id)}>
+                    Ver Detalles
+                  </Button>
                 </Col>
               </Row>
             ))
           )}
         </Col>
       </Row>
+
+      {/* Modal para mostrar los detalles de la reserva */}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Detalles de la Reserva</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {reservationDetails ? (
+            <div>
+              <h5>Reserva:</h5>
+              <p><strong>ID:</strong> {reservationDetails.reservation.id}</p>
+              <p><strong>Usuario:</strong> {reservationDetails.user.name}</p>
+              <p><strong>Campo:</strong> {reservationDetails.field.name}</p>
+              <p><strong>Fecha:</strong> {new Date(reservationDetails.reservation.zonedatetime).toLocaleDateString()}</p>
+              <p><strong>Hora:</strong> {new Date(reservationDetails.reservation.zonedatetime).toLocaleTimeString()}</p>
+            </div>
+          ) : (
+            <p>Cargando detalles...</p>
+          )}
+        </Modal.Body>
+      </Modal>
     </Container>
   );
 };

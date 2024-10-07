@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard'
 import Payments from './pages/Payments'
 import Reservations from './pages/Reservations'
 import Fields from './pages/Fields'
+import CreateReservationWithPayment from './pages/CreateReservationWithPayment '
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
           <Route path='/payments' element={<Payments/>}/>
           <Route path='/reservations' element={<Reservations/>}/>
           <Route path='/fields' element={<Fields/>}/>
+          <Route path='/create/payment' element={<CreateReservationWithPayment/>}/>
         </Routes>
       </Router>
     </>

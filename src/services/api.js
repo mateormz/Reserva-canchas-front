@@ -8,6 +8,8 @@ const RESERVATIONSAPI = 'http://localhost:8000/api/v1';
 
 const PAGOSAPI = 'http://localhost:3000'
 
+const ORQUESTADOR = "http://localhost:8000"
+
 export const fetchLogin = async(username, password) => {
 
     const response = await axios.post(`${USERAPI}/auth/login`, {username, password});
@@ -65,3 +67,27 @@ export const fetchPagos = async () => {
       throw error;
     }
   };
+
+// Orquestador
+
+export const reservationPost = async (reservationRequest) => {
+    const response = await fetch(`${USERAPI}/reserva-con-pago`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reservationRequest),
+    });
+    if (!response.ok) {
+      throw new Error('Error al crear la reserva y el pago');
+    }
+    return response.json();
+  };
+
+export const fetchReservationDetails = async (id) => {
+    const response = await fetch(`http://localhost:8080/reservas/detalles/${id}`);
+    if (!response.ok) {
+        throw new Error('Error al obtener los detalles de la reserva');
+    }
+    return response.json();
+};
